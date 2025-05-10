@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punjab Daanish School Jand Attock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #1a2a44; /* Dark blue */
+            color: #f5f6f5; /* Soft white */
+            overflow-x: hidden;
+            position: relative;
+            scroll-snap-type: y proximity;
+        }
+
+        /* Aurora Background */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f1e33, #1a2a44);
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .aurora-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 204, 204, 0.2), rgba(255, 215, 0, 0.1));
+            animation: auroraWave 20s ease-in-out infinite;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            height: calc(100vh - 100px);
+            width: 4px;
+            background: linear-gradient(to bottom, #00cccc, #ffd700);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 204, 204, 0.5);
+        }
+
+        .timeline-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #f5f6f5;
+            border-radius: 50%;
+            left: -4px;
+            transform: scale(1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timeline-node.active {
+            transform: scale(1.5);
+            background: #00cccc;
+            box-shadow: 0 0 15px #00cccc;
+            animation: pulseNode 1.5s infinite;
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            height: 100vh;
+            background: url('https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486874146_1065913365555687_6121890468339857033_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=ODe3IOLKf1gQ7kNvwFP_DtS&_nc_oc=AdnvfRvZhTDTpy8FR8MuMItBAH0wQAypPccO4wNGXDRY1RTfMVnH7CthVh9PPiMRxu0&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=h_7ajBMlsJW454JnlM90Ew&oh=00_AfKRI6Mzj-q7BqKKZVloTqLZxB9KIpBQFY1027PYfMPkKQ&oe=6824DDF9') no-repeat center center/cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            scroll-snap-align: start;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 42, 68, 0.6);
+            z-index: 1;
+        }
+
+        .header-logo {
+            position: relative;
+            z-index: 2;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            animation: rotate3D 10s linear infinite;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .header-logo:hover {
+            box-shadow: 0 0 15px rgba(0, 204, 204, 0.7);
+        }
+
+        header h1, header p, header a {
+            position: relative;
+            z-index: 2;
+            color: #f5f6f5;
+            text-shadow: 0 0 8px rgba(0, 204, 204, 0.6);
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.6rem;
+            max-width: 600px;
+            animation: fadeInText 2s ease-in-out;
+        }
+
+        header a {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid #ffd700;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header a:hover {
+            background: #ffd700;
+            color: #1a2a44;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(26, 42, 68, 0.9), rgba(0, 204, 204, 0.2));
+            backdrop-filter: blur(10px);
+            padding: 0.7rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 204, 204, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: linear-gradient(135deg, rgba(26, 42, 68, 0.95), rgba(0, 204, 204, 0.3));
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 204, 204, 0.7);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: #f5f6f5;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #ffd700, #00cccc);
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            text-shadow: 0 0 5px #00cccc;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #f5f6f5;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 3rem;
+            background: linear-gradient(180deg, #1a2a44, #0f1e33);
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            scroll-snap-align: start;
+            opacity: 0.7;
+            transform: translateX(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        section.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        section:nth-child(odd) {
+            background: linear-gradient(180deg, #0f1e34, #1a2a44);
+        }
+
+        section h2 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #f5f6f5;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+            position: relative;
+            letter-spacing: 1px;
+        }
+
+        section h2::before {
+            content: '🎓'; /* Subtle school-themed icon */
+            font-size: 1.5rem;
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+        }
+
+        section p, section li {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #d8d9d8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-image {
+            width: 600px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            loading: lazy;
+        }
+
+        .section-image:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 204, 204, 0.5);
+        }
+
+        .section-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 204, 204, 0.1), rgba(255, 215, 0, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-image:hover::before {
+            opacity: 0.5;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(245, 246, 245, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 320px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 204, 204, 0.1), rgba(255, 215, 0, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) rotate(3deg);
+            box-shadow: 0 10px 20px rgba(0, 204, 204, 0.4);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+            loading: lazy;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            color: #f5f6f5;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 4px rgba(0, 204, 204, 0.5);
+        }
+
+        #gallery {
+        padding: 6rem 3rem;
+        background: linear-gradient(180deg, #1a2a44, #0f1e33);
+        position: relative;
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        scroll-snap-align: start;
+        opacity: 0.7;
+        transform: translateX(50px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #gallery.animate {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    #gallery h2 {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #f5f6f5;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+        position: relative;
+        letter-spacing: 1px;
+    }
+
+    #gallery h2::before {
+        content: '🎓';
+        font-size: 1.5rem;
+        position: absolute;
+        left: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.4;
+    }
+
+    /* Main Image */
+    .section-image {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        max-height: 400px;
+        border-radius: 12px;
+        margin: 0 auto 2rem;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        loading: lazy;
+    }
+
+    .section-image:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 15px rgba(0, 204, 204, 0.5);
+    }
+
+    .section-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0, 204, 204, 0.1), rgba(255, 215, 0, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .section-image:hover::before {
+        opacity: 0.5;
+    }
+
+    /* Gallery Grid - 2x2 Layout */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 1.5rem;
+        margin-top: 2rem;
+        padding: 0 2rem;
+        width: 100%;
+        max-width: 700px; /* Constrain grid width for balance */
+    }
+
+    .gallery-grid img {
+        width: 100%;
+        height: 200px;
+        max-width: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        loading: lazy;
+    }
+
+    .gallery-grid img.animate {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .gallery-grid img:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        border: 1px solid #ffd700;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .section-image {
+            max-width: 90%;
+            max-height: 300px;
+        }
+
+        .gallery-grid {
+            grid-template-columns: 1fr; /* Stack images vertically on mobile */
+            grid-template-rows: auto;
+            padding: 0 1rem;
+            max-width: 100%;
+        }
+
+        .gallery-grid img {
+            max-width: 100%;
+            height: 180px;
+        }
+
+        #gallery h2 {
+            font-size: 2.2rem;
+        }
+    }
+    
+      /* Achievements Section */
+    #achievements {
+        padding: 6rem 3rem;
+        background: linear-gradient(180deg, #1a2a44, #0f1e33);
+        position: relative;
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        scroll-snap-align: start;
+        opacity: 0.7;
+        transform: translateX(50px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #achievements.animate {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    #achievements h2 {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #f5f6f5;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
+        position: relative;
+        letter-spacing: 1px;
+    }
+
+    #achievements h2::before {
+        content: '🎓';
+        font-size: 1.5rem;
+        position: absolute;
+        left: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.4;
+    }
+
+    /* Main Image */
+    .section-image {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        max-height: 400px;
+        border-radius: 12px;
+        margin: 0 auto 2rem;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        loading: lazy;
+    }
+
+    .section-image:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 15px rgba(0, 204, 204, 0.5);
+    }
+
+    .section-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0, 204, 204, 0.1), rgba(255, 215, 0, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .section-image:hover::before {
+        opacity: 0.5;
+    }
+
+    /* Achievement Cards */
+    .achievement-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+        max-width: 1200px;
+    }
+
+    .achievement-card {
+        background: rgba(245, 246, 245, 0.15);
+        backdrop-filter: blur(8px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        width: 300px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .achievement-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0, 204, 204, 0.1), rgba(255, 215, 0, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .achievement-card:hover::before {
+        opacity: 1;
+    }
+
+    .achievement-card:hover {
+        transform: translateY(-10px) rotate(3deg);
+        box-shadow: 0 10px 20px rgba(0, 204, 204, 0.4);
+    }
+
+    .achievement-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease;
+        loading: lazy;
+    }
+
+    .achievement-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .achievement-card h3 {
+        color: #f5f6f5;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 4px rgba(0, 204, 204, 0.5);
+    }
+
+    .achievement-card p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #d8d9d8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .section-image {
+            max-width: 90%;
+            max-height: 300px;
+        }
+
+        .achievement-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .achievement-card {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .achievement-card img {
+            height: 180px;
+        }
+
+        #achievements h2 {
+            font-size: 2.2rem;
+        }
+    }
+
+        /* Contact Section */
+        #contact {
+            position: relative;
+        }
+
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(0, 204, 204, 0.2), transparent);
+            animation: pulse 10s infinite;
+            z-index: -1;
+        }
+
+        .contact-details {
+            background: rgba(245, 246, 245, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-details:hover {
+            transform: perspective(1000px) rotateX(3deg);
+            box-shadow: 0 10px 20px rgba(0, 204, 204, 0.5);
+        }
+
+        .contact-details p {
+            font-size: 1.2rem;
+            color: #f5f6f5;
+            margin: 1.5rem 0;
+            position: relative;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .contact-details p::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s ease;
+        }
+
+        .contact-details p:hover::after {
+            width: 100%;
+        }
+
+        .contact-details p:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 8px #ffd700;
+        }
+
+        /* Curved Divider */
+        .curve-divider {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(0, 204, 204, 0.3), transparent);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a2a44;
+            font-size: 1.2rem;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px #ffd700;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f1e33;
+            padding: 3rem;
+            text-align: center;
+            color: #d8d9d8;
+            border-top: 2px solid rgba(0, 204, 204, 0.4);
+        }
+
+        .social-links a {
+            color: #d8d9d8;
+            margin: 0 1.5rem;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 8px #ffd700;
+        }
+
+        /* Animations */
+        @keyframes auroraWave {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            50% { transform: translate(30px, 30px); opacity: 0.5; }
+            100% { transform: translate(0, 0); opacity: 0.8; }
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes fadeInText {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseNode {
+            0% { transform: scale(1.5); }
+            50% { transform: scale(1.8); }
+            100% { transform: scale(1.5); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+            100% { opacity: 0.2; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .timeline {
+                display: none; /* Hide timeline on mobile */
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(26, 42, 68, 0.9);
+                flex-direction: column;
+                padding: 1rem 0;
+                animation: slideIn 0.3s ease;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 1rem 0;
+            }
+
+            header h1 {
+                font-size: 2.8rem;
+            }
+
+            header p {
+                font-size: 1.3rem;
+            }
+
+            section h2 {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                width: 100%;
+            }
+
+            .section-image {
+                width: 100%;
+            }
+
+            .contact-details {
+                padding: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg"></div>
+    <div class="timeline">
+        <div class="timeline-node" data-section="about"></div>
+        <div class="timeline-node" data-section="admissions"></div>
+        <div class="timeline-node" data-section="academics"></div>
+        <div class="timeline-node" data-section="facilities"></div>
+        <div class="timeline-node" data-section="faculty"></div>
+        <div class="timeline-node" data-section="activities"></div>
+        <div class="timeline-node" data-section="achievements"></div>
+        <div class="timeline-node" data-section="gallery"></div>
+        <div class="timeline-node" data-section="contact"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/299496608_592134349113081_3789155236393472668_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ah2t1ZsqVO4Q7kNvwHQkkjQ&_nc_oc=AdlD5Nklur8L3UXJl1NplQLco6Lq7fuVhWFDbGeSuMgO_EdOjbJgszrxaZ_wYwKPZKQ&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=N8r4lWOHd8xNnhKz40fBHA&oh=00_AfL1dBGiZ60nkua9l7twAYmmtmomkCLoAOqTKVlNseaDCQ&oe=6824B7C8" alt="School Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#admissions">Admissions</a></li>
+            <li><a href="#academics">Academics</a></li>
+            <li><a href="#facilities">Facilities</a></li>
+            <li><a href="#faculty">Faculty</a></li>
+            <li><a href="#activities">Activities</a></li>
+            <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="hamburger">☰</div>
+    </nav>
+
+    <header id="home" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/299496608_592134349113081_3789155236393472668_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ah2t1ZsqVO4Q7kNvwHQkkjQ&_nc_oc=AdlD5Nklur8L3UXJl1NplQLco6Lq7fuVhWFDbGeSuMgO_EdOjbJgszrxaZ_wYwKPZKQ&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=N8r4lWOHd8xNnhKz40fBHA&oh=00_AfL1dBGiZ60nkua9l7twAYmmtmomkCLoAOqTKVlNseaDCQ&oe=6824B7C8" alt="School Logo" class="header-logo">
+        <h1>Punjab Daanish School Jand Attock</h1>
+        <p>Empowering Underprivileged Youth with Quality Education</p>
+        <a href="#facilities">Explore Our Campus</a>
+    </header>
+
+    <div class="curve-divider"></div>
+
+    <section id="about" data-animate="fadeIn">
+        <h2>About Us</h2>
+        <p>Punjab Daanish School Jand Attock, established in 2012, is part of the Punjab Daanish Schools and Centres of Excellence Authority, a visionary initiative by former Chief Minister Shehbaz Sharif. Located in Tehsil Jand, 100 km from Islamabad, our Boys’ campus spans 183 acres, and the Girls’ campus covers 42 acres. We provide free, high-quality education to underprivileged children, fostering academic excellence and character development.</p>
+    </section>
+
+    <div class="curve-divider"></div>
+
+    <section id="admissions" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/492015650_1085991390214551_7868657812200438179_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=JErfJnExLVwQ7kNvwE0Y-y9&_nc_oc=AdkTmzCNiDekgGzrDAqwp5xFf3MSV5Yj68xWKe2bWuuvu6RXsx_qjYJp-DGr89Zkjl8&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=5zmzXGQhuolAHt_tQGJtyA&oh=00_AfLGMcaEjpUhOPKpknK2EYCAHBGGbqFUYaIaTJScLp4qFA&oe=6824F5B9" alt="Admissions" class="section-image">
+        <h2>Admissions</h2>
+        <p>Admissions for Grade VI are open annually, with a merit-based process. Each campus admits 110 students, prioritizing those from low-income families (below PKR 15,000/month). The entrance test in December covers English, Math, Science, Urdu, and IQ. Apply by December 8, 2024, for the 2025 session.</p>
+        <div class="card-container">
+            <div class="card" data-animate="fadeIn">
+                <h3>Eligibility</h3>
+                <p>Students aged 10-12 who have passed Grade V, with parental income below PKR 15,000/month for free seats.</p>
+            </div>
+            <div class="card" data-animate="fadeIn">
+                <h3>Process</h3>
+                <p>Submit forms by December 8, 2024, take the entrance test on December 26, 2024, and await merit lists.</p>
+            </div>
+            <div class="card" data-animate="fadeIn">
+                <h3>Scholarships</h3>
+                <p>Full scholarships for 99% of students, covering tuition, boarding, and expenses.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="curve-divider"></div>
+
+    <section id="academics" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/485806650_1060683572745333_8156751033135049324_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=DJfMiUoL8RIQ7kNvwHUwZTw&_nc_oc=Admi7CdBKTpO22yrQ07mqWtXoU3DCtlv0ceENGrp25KRqw4IkW-fkfTQHFT6I66UrBQ&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=CD-puULCSXk_OdKi3g9Sfw&oh=00_AfIKgUKmVCl9YUnza0QErpAKsEhge9Xf1hqdxVcqNGA9Vg&oe=6824D2DC" alt="Academics" class="section-image">
+        <h2>Academic Programs</h2>
+        <p>Our BISE Lahore-registered curriculum spans Grade VI to F.Sc., with small classes (30-35 students) for personalized learning. Subjects include English, Mathematics, General Science, Urdu, and Social Studies, with Pre-Medical, Pre-Engineering, and Computer Science streams at higher levels.</p>
+    </section>
+
+    <div class="curve-divider"></div>
+
+    <section id="facilities" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/487009789_1063668122446878_7570727524556037870_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=OfD1PWri9K8Q7kNvwEraTa-&_nc_oc=Adm5xXI4JJzHdl4KyXyaLYklc5WYOKQ-CxnmuqgGS6PKF0iwlOJ-vLlqMZrJZQS8A_Y&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=lttw5H1QoS5QEv8LQhelGQ&oh=00_AfKWQqvkM7iXeiScPvM1BEs5I54wMG0roSFOSQbSTs9R2g&oe=682509FB" alt="Facilities" class="section-image">
+        <h2>Facilities</h2>
+        <p>Our campuses feature modern classrooms, science and computer labs, libraries, and comfortable boarding facilities. Sports grounds, auditoriums, and recreational spaces ensure a balanced lifestyle for students.</p>
+        <div class="card-container">
+            <div class="card" data-animate="fadeIn">
+                <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486801121_1065406528939704_8506437668294957151_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=PZSW67FJFt0Q7kNvwFSGjzO&_nc_oc=Adn4D0tCLsxRN9bp7lOlhrgyd0GFzfoKOrSXlihzmDeA0N7BWHi08smAsIYi72J41xM&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=qFKcSjBQGiagyYdoMtWRHw&oh=00_AfLm5FenJSBKdbUPGrC1nadOoIbbfOzHHlZPdMd7i-crUg&oe=6824E853" alt="Classroom">
+                <h3>Academic Facilities</h3>
+                <p>Modern labs, libraries, and smart classrooms for enhanced learning.</p>
+            </div>
+            <div class="card" data-animate="fadeIn">
+                <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486826657_1064264552387235_9092436693398638027_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=nEFhaAGCM1oQ7kNvwHbvVIl&_nc_oc=AdkZh2QJqBxW1edYUtdevVGKk-ljNqMaNoh6W-ZSuiqDqCZhh1RJDdpIurN170N1ovc&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=gJcFI0nzqc2wqpeXynB7bQ&oh=00_AfLjRr6tshX4k9cAXkPZQrQH_JsU9NTC2jV73PZYiYQIag&oe=6824E0D4" alt="Boarding">
+                <h3>Boarding</h3>
+                <p>Safe, comfortable dormitories with 24/7 supervision.</p>
+            </div>
+            <div class="card" data-animate="fadeIn">
+                <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/492225322_1086891236791233_6310471076690031425_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=uHAC1YK2haMQ7kNvwGuDaoQ&_nc_oc=AdmmtfJXTEpO-EZuEyv559LbymRv_1elkSKwa9yqZl8G8rq_XPd5AOOL84fpN_8-AQc&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=3dHFqV0o38gbg3lo0AZMsg&oh=00_AfLSV2eV305277d5Adz9twWP9CStTiOlkzDec7Y9pLj5ug&oe=6824CC2F" alt="Sports">
+                <h3>Recreation</h3>
+                <p>Sports fields, gyms, and cultural spaces for student development.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="curve-divider"></div>
+
+    <section id="faculty" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/487472373_1065920595554964_9219054990859549618_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=2aorbzD-lsAQ7kNvwGDfRRr&_nc_oc=AdlNs0r7RtXoeyzFX3HToJS1UCT54Q33sNeGir4-E3NNsjv1HNb3qPv-al49MrvFQwE&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=6nDN25bjM1TGEp1c3XfXFg&oh=00_AfJd2B5ybbcWSduPtk2AvGalPuL6Ledp3nRitpymdBFcAg&oe=6824E82F" alt="Faculty" class="section-image">
+        <h2>Faculty</h2>
+        <p>Our 484-strong faculty across the Daanish network includes qualified teachers for core subjects. At Jand Attock, educators like Prof. Sahibzada Naeem Ur Rasool and Ms. Riffat Naz set high standards, fostering critical thinking and academic excellence.</p>
+    </section>
+
+    <div class="curve-divider"></div>
+
+    <section id="activities" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/475135654_1134499021543275_4248165932857095920_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=24xOTAmAwG4Q7kNvwEchCJR&_nc_oc=AdnsnCb6hghPjsvTWWR5m4rYKuFjtyPIAj_MS7r9MIsZeQWStZ_VowNPotek3N-JDPo&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=XwOEacaWkPDiUdOI5GOVRw&oh=00_AfLw-5j4_kE_lhuDYQNCnW2wVRPyPlec8KR1wnyCxD-mBg&oe=682508A7" alt="Activities" class="section-image">
+        <h2>Co-Curricular Activities</h2>
+        <p>We promote holistic development through sports, arts, debates, and cultural events. Students engage in inter-school competitions, science fairs, and environmental initiatives like the “Plant for Pakistan” campaign, planting over 42,000 saplings.</p>
+    </section>
+
+    <div class="curve-divider"></div>
+    
+
+ <section id="achievements" data-animate="fadeIn">
+    <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486320023_1060210532792637_7528849114305563923_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_ohc=m2Kv88M9eMAQ7kNvwGz1S11&_nc_oc=Adnt1LVjBpSle-Vh8oEaFh6xulIL-QESVApnpmMAGEF3eOJMqtMIZRLsQl8El75tE4w&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=rJWlz-XcVhkJknkdcKz9aw&oh=00_AfIg7U8Bmg8nKYVHJYRruZQO0lFc6wgrQWvPU5XQAWnHvA&oe=682514E5" alt="Achievements" class="section-image">
+    <h2>Achievements</h2>
+     <div class="achievement-container">
+        <div class="achievement-card" data-animate="fadeIn">
+            <img src="https://images.unsplash.com/photo-1544526226-d4568090ffb8" alt="Top Scorer">
+            <h3>Perfect Score Excellence</h3>
+            <p>Hifsa Bibi achieved a remarkable 1100/1100 in her board exams, setting a benchmark for academic excellence at Punjab Daanish School Jand Attock.</p>
+        </div>
+        <div class="achievement-card" data-animate="fadeIn">
+            <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486807633_1064391355707888_5397539247621659528_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=sePofGH-L7YQ7kNvwGK1tAu&_nc_oc=AdnCitZqD0EgOaLCgJ8qW2YMF6qfUEMv3LrGE9kbHHzA93-lZofytRLctFRWKk2ORy4&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=tA9cEECl4EkweKlfQUysCA&oh=00_AfKF5iZsIF9zXsuiYeJSNDwej-z--yEDNki_-SGEryAanw&oe=68252D3D" alt="Competitive Admissions">
+            <h3>Highly Competitive Admissions</h3>
+            <p>Over 1,600 candidates competed for 110 seats in 2024, showcasing the school's reputation for quality education and rigorous selection process.</p>
+        </div>
+        <div class="achievement-card" data-animate="fadeIn">
+            <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/476061862_633579182395888_4405765609912018425_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=ji0_OOfZ9K4Q7kNvwHz0PW0&_nc_oc=AdkIX8nmNSONYpx8afpDBEbwQaatxrPrIZ2TisLvJz1AjPtsF6dDwpknfvuHX2ICxG8&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=lXhEaf1rUMeXzNVjXSO8DA&oh=00_AfLZa1d9uPjfoEZcr7EzNKBPLDZXgrSlcxAGCV7x1mZBtA&oe=68250BB9" alt="Alumni Success">
+            <h3>Alumni Achievements</h3>
+            <p>Our alumni excel in fields like CyberSecurity, engineering, national sports and public service, contributing significantly to society with skills honed at Daanish School.</p>
+        </div>
+    </div>
+ </section>
+
+    <section id="gallery" data-animate="fadeIn">
+    <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486129460_1064062199074137_1254761131238247613_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=ycZHwHdsP-cQ7kNvwGO_3R9&_nc_oc=Adkx53uevux0bZIlon3JK8zbcwZ_N-xJkWS3a-KmhPhv1lR73baExSeyUqADtgmF_J8&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=vLHFd5NygeTLcw6E5PUQzg&oh=00_AfKV_0yj3Jqx-nmI39AWFzKo0Mzf9lWYSBQPj47WHsGlfg&oe=68250308" alt="Gallery Main" class="section-image">
+    <h2>Gallery</h2>
+    <div class="gallery-grid">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486574391_1064062215740802_4201017073224921090_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=b5vo2zUqSgwQ7kNvwHCMjuE&_nc_oc=AdmWelUB8m0M5iIFcDVAD8Bqa9x0a5JnM_ZeoFodROL1Z-q2uDIjg60NZgT61ZSUbLE&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=YD6XoBMekA6AhOYioRMuzg&oh=00_AfKBfsvrcNm0PrPxRhaFEcczgyWFMdtgdT6QG-7gWG15aQ&oe=6824FDFA" alt="Campus View" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/475191415_1135816168078227_7557975257725181984_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=1VEkgZXOiXQQ7kNvwG3oIDl&_nc_oc=AdmZ64NQaznxts7OO1LZM2hUeeFjxVFsTIm0eB1mpc_HMnQI_C8J_DAh6FfGTrrZcx0&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=WQjkrr5IFJITrDFrcJDlPw&oh=00_AfLCd7aG8r9eHRu_DOyPXEwBwnEL0ws6Vkc_vpSF9FCIkA&oe=6824F104" alt="Classroom" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/475114803_1135803078079536_6769937430279028194_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=UAbfddbXSG4Q7kNvwF3YblL&_nc_oc=Adm6faVNeeusleNs9BHoDTTvQp5CZJnM0PUly61oxhzCaMO2SwA9DY7pfKbLbDoqg1s&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=eopMW7Tv3PHbk2hFU_uovQ&oh=00_AfLWSq_io_X72jVMoTg0YZSQV-nWUeco7hggMgNfQuZy8Q&oe=6824DE1A" alt="Sports Event" data-animate="fadeIn">
+        <img src="https://scontent.flhe6-1.fna.fbcdn.net/v/t39.30808-6/486771337_1065406752273015_1858844665541066701_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=66IRedmIOk0Q7kNvwFnm6rB&_nc_oc=AdnHUTB1yHHMGfcSllgnrcooMc7awmyQeE-Iy3tFYmxrLaf7nQQ1p9pEP4S-bAtLQp0&_nc_zt=23&_nc_ht=scontent.flhe6-1.fna&_nc_gid=PzJR_bC71y24l9upp17tbg&oh=00_AfILfl8DOsbEy72RLAvUctmN6Oa8MLvQmDaKiWurHhcJqQ&oe=6824EBF3" alt="Science Lab" data-animate="fadeIn">
+    </div>
+</section>
+
+    <div class="curve-divider"></div>
+
+    <section id="contact" data-animate="fadeIn">
+       
+        <h2>Contact Us</h2>
+        <div class="contact-details">
+            <p>Address: Daanish School (Boys & Girls), near Langar Stop, Jand, District Attock</p>
+            <p>Phone: +92-42-99231737</p>
+            <p>Email: info@daanishschools.edu.pk</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Punjab Daanish School Jand Attock. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <a href="#home" class="back-to-top">↑</a>
+
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+                backToTop.classList.add('visible');
+            } else {
+                nav.classList.remove('scrolled');
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Scroll Animations and Timeline Nodes
+        const sections = document.querySelectorAll('section');
+        const timelineNodes = document.querySelectorAll('.timeline-node');
+        const galleryImages = document.querySelectorAll('.gallery-grid img');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    const sectionId = entry.target.id;
+                    timelineNodes.forEach(node => {
+                        if (node.dataset.section === sectionId) {
+                            node.classList.add('active');
+                        } else {
+                            node.classList.remove('active');
+                        }
+                    });
+                    // Animate gallery images
+                    if (sectionId === 'gallery') {
+                        galleryImages.forEach((img, index) => {
+                            setTimeout(() => {
+                                img.classList.add('animate');
+                            }, index * 200);
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Set timeline node positions dynamically
+        const timeline = document.querySelector('.timeline');
+        const timelineHeight = timeline.offsetHeight;
+        const nodeCount = timelineNodes.length;
+        const nodeSpacing = timelineHeight / (nodeCount - 1);
+
+        timelineNodes.forEach((node, index) => {
+            node.style.top = `${index * nodeSpacing}px`;
+        });
+    </script>
+</body>
+</html>
