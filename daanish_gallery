@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daanish Gallery</title>
+    <style>
+        :root {
+            --primary-blue: #0066ff;
+            --glass-blue: rgba(0, 102, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-highlight: rgba(255, 255, 255, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #001a33 0%, var(--primary-blue) 80%, white 20%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .gallery-container {
+            padding: 5vh 5vw;
+            perspective: 1000px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 5vh;
+            text-shadow: 0 0 20px rgba(0, 102, 255, 0.7);
+            letter-spacing: 2px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1/1;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                0 0 0 1px var(--glass-border),
+                0 10px 30px -10px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px var(--glass-highlight);
+            background: var(--glass-blue);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.03) rotateX(5deg);
+            box-shadow: 
+                0 0 0 1px var(--glass-highlight),
+                0 20px 50px -10px rgba(0, 0, 0, 0.4),
+                inset 0 0 30px var(--glass-highlight);
+        }
+        
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.1) 100%);
+            z-index: 2;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s ease;
+            transform-origin: center;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            margin-top: 50px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Futuristic glowing effects */
+        .glow {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .glow-1 {
+            background: radial-gradient(circle at 30% 30%, rgba(0, 102, 255, 0.2) 0%, transparent 50%);
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .glow-2 {
+            background: radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: float 20s infinite ease-in-out reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(5%, 5%); }
+            50% { transform: translate(10%, 0); }
+            75% { transform: translate(5%, -5%); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="gallery-container">
+        <h1>Daanish Gallery</h1>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,classroom" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,sports" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,lab" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,art" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,ceremony" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,library" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,music" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,assembly" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,event" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,playground" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,graduation" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="https://source.unsplash.com/random/600x600/?school,teachers" alt="">
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        © Daanish Gallery • Preserving School Memories
+    </footer>
+</body>
+</html>
